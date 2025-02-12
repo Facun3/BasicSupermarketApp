@@ -44,9 +44,7 @@ testem.log
 Thumbs.db
 
 # Angular
-/dist
-/tmp
-/out-tsc
+/environments
 environment.ts
 environment.prod.ts
 environments/environment.ts

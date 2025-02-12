@@ -13,10 +13,12 @@ import { ItemCardComponent } from '../item-card/item-card.component';
   imports: [ItemCardComponent],
   templateUrl: './item-list.component.html',
   styleUrl: './item-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemListComponent {
   public productsService = inject(ProductsService);
 
   items = input.required<Product[]>();
+  emptyMsg: string = ' No results found';
+
+  isLoadingProducts = this.productsService.loading;
 }

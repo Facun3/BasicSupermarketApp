@@ -1,25 +1,33 @@
-<!-- src/app/header/header.component.html -->
-<header class="bg-blue-600 text-white shadow-md">
-  <div
-    class="container mx-auto flex justify-between items-center p-4 max-w-screen-xl"
-  >
+<header
+  class="bg-blue-600 text-white shadow-md mb-4 fixed top-0 left-0 w-full z-50"
+>
+  <div class="container mx-auto flex items-center justify-between p-4">
     <!-- Logo -->
-    <div class="text-xl font-bold">
-      <a href="/" class="hover:text-gray-200">Facu's eShop</a>
+    <div class="text-xl font-bold max-w-xs">
+      <a href="/" class="hover:text-gray-200" aria-label="Go to homepage"
+        >Facu's Shop</a
+      >
     </div>
 
-    <app-search-bar class="w-full"></app-search-bar>
+    <!-- Search Bar con mejor responsividad -->
+    <search-bar class="flex-grow max-w-md md:max-w-lg"></search-bar>
 
-    <!-- Search and Cart -->
-    <div class="flex items-center space-x-4">
-      <!-- Cart -->
-      <a href="/cart" class="hover:text-gray-200 flex items-center">
-        🛒
-        <span
-          class="ml-1 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"
-          >2</span
-        >
-      </a>
-    </div>
+    <!-- Cart -->
+    <app-cart></app-cart>
   </div>
+  <nav id="subheader" class="bg-blue-500 text-white py-2">
+    <div
+      class="container mx-auto flex justify-between items-center overflow-x-auto gap-4 px-4"
+    >
+      @for(category of categories(); track category.id) { @if(category.parentId
+      === null) {
+      <button
+        class="hover:text-gray-200"
+        (click)="onSelectCategory(category.id)"
+      >
+        <span class="text-md">{{ category.name }}</span>
+      </button>
+      } }
+    </div>
+  </nav>
 </header>

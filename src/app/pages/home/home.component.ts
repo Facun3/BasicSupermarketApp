@@ -1,44 +1,32 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CategoriesService } from '@app/core/services/categories.service';
-import { NgFor } from '@angular/common';
-
-interface Category {
-  id: number;
-  name: string;
-  description: string;
-  parentId: number;
-  children: Category[];
-}
+import { ItemListComponent } from '../../components/item-list/item-list.component';
+import { ProductsService } from '@app/core/services/products.service';
+import { SpinnerComponent } from '@app/components/spinner/spinner.component';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [ItemListComponent, SpinnerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  protected productsService = inject(ProductsService);
   protected categoriesService = inject(CategoriesService);
+
+  products = this.productsService.products;
+  totalProducts = this.productsService.totalProducts;
   categories = this.categoriesService.categories;
+  isLoadingProducts = this.productsService.loading;
 
-  structuredCategories = computed(() => {
-    const categoryMap = new Map<number, Category>();
-    const allCategories = this.categories().map((cat) => ({
-      ...cat,
-      children: [] as Category[],
-    }));
-    allCategories.forEach((cat) => {
-      categoryMap.set(cat.id, cat);
-    });
+  onLoadMore() {
+    this.productsService.loadMoreProducts();
+  }
 
-    return allCategories.filter((cat) => {
-      if (cat.parentId !== null) {
-        const parent = categoryMap.get(cat.parentId);
-        if (parent) {
-          parent.children.push(cat);
-        }
-        return;
-      }
-      return true;
-    });
-  });
+  hasMoreProducts() {
+    return (
+      this.productsService.totalProducts() >
+      this.productsService.products().length
+    );
+  }
 }
